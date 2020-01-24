@@ -186,14 +186,14 @@ def _main(instaloader: Instaloader, targetlist: List[str],
             instaloader.context.error("Warning: Use --login to download HD version of profile pictures.")
         instaloader.download_profiles(profiles,
                                       download_profile_pic, download_posts, download_tagged, download_highlights,
-                                      download_stories, fast_update, post_filter, storyitem_filter)
+                                      download_stories, fast_update, post_filter, storyitem_filter, max_count=max_count)
         if anonymous_retry_profiles:
             instaloader.context.log("Downloading anonymously: {}"
                                     .format(' '.join([p.username for p in anonymous_retry_profiles])))
             with instaloader.anonymous_copy() as anonymous_loader:
                 anonymous_loader.download_profiles(anonymous_retry_profiles,
                                                    download_profile_pic, download_posts, download_tagged,
-                                                   fast_update=fast_update, post_filter=post_filter)
+                                                   fast_update=fast_update, post_filter=post_filter, max_count=max_count)
     except KeyboardInterrupt:
         print("\nInterrupted by user.", file=sys.stderr)
     # Save session if it is useful

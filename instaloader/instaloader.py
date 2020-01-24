@@ -966,7 +966,8 @@ class Instaloader:
                           fast_update: bool = False,
                           post_filter: Optional[Callable[[Post], bool]] = None,
                           storyitem_filter: Optional[Callable[[Post], bool]] = None,
-                          raise_errors: bool = False):
+                          raise_errors: bool = False,
+                          max_count: int = None):
         """High-level method to download set of profiles.
 
         :param profiles: Set of profiles to download.
@@ -981,7 +982,7 @@ class Instaloader:
         :param raise_errors:
            Whether :exc:`LoginRequiredException` and :exc:`PrivateProfileNotFollowedException` should be raised or
            catched and printed with :meth:`InstaloaderContext.error_catcher`.
-
+        :param max_count: Max number of posts to download.
         .. versionadded:: 4.1"""
 
         @contextmanager
@@ -1027,9 +1028,9 @@ class Instaloader:
                 # Iterate over pictures and download them
                 if posts:
                     self.context.log("Retrieving posts from profile {}.".format(profile_name))
-                    totalcount = profile.mediacount
+                    totalcount = max_count if max_count else profile.mediacount
                     count = 1
-                    for post in profile.get_posts():
+                    for post in profile.get_posts(count=max_count):
                         self.context.log("[%3i/%3i] " % (count, totalcount), end="", flush=True)
                         count += 1
                         if post_filter is not None and not post_filter(post):
@@ -1066,7 +1067,8 @@ class Instaloader:
                          download_stories: bool = False, download_stories_only: bool = False,
                          download_tagged: bool = False, download_tagged_only: bool = False,
                          post_filter: Optional[Callable[[Post], bool]] = None,
-                         storyitem_filter: Optional[Callable[[StoryItem], bool]] = None) -> None:
+                         storyitem_filter: Optional[Callable[[StoryItem], bool]] = None,
+                         max_count: int = None) -> None:
         """Download one profile
 
         .. deprecated:: 4.1
@@ -1131,9 +1133,9 @@ class Instaloader:
 
         # Iterate over pictures and download them
         self.context.log("Retrieving posts from profile {}.".format(profile_name))
-        totalcount = profile.mediacount
+        totalcount = max_count if max_count else profile.mediacount
         count = 1
-        for post in profile.get_posts():
+        for post in profile.get_posts(count=max_count):
             self.context.log("[%3i/%3i] " % (count, totalcount), end="", flush=True)
             count += 1
             if post_filter is not None and not post_filter(post):
