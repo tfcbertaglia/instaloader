@@ -698,7 +698,7 @@ class Profile:
 	   Use :attr:`profile_pic_url`."""
         return self.profile_pic_url
 
-    def get_posts(self, count=sys.maxsize) -> Iterator[Post]:
+    def get_posts(self, count:int = sys.maxsize) -> Iterator[Post]:
         """Retrieve all posts from a profile.
         :param count: Number of posts to retrieve. By default, returns all (count=sys.maxsize)."""
         self._obtain_metadata()
