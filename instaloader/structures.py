@@ -701,6 +701,8 @@ class Profile:
     def get_posts(self, count:int = sys.maxsize) -> Iterator[Post]:
         """Retrieve all posts from a profile.
         :param count: Number of posts to retrieve. By default, returns all (count=sys.maxsize)."""
+        if count is None:
+            count = sys.maxsize
         self._obtain_metadata()
         yield from islice((Post(self._context, node, self) for node in
                     self._context.graphql_node_list("472f257a40c653c64c666ce877d59d2b",
